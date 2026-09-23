@@ -52,22 +52,6 @@
         font-size: 16px;
     }
 
-    button {
-        width: 100%;
-        padding: 13px;
-        margin-top: 25px;
-        border: none;
-        border-radius: 7px;
-        background: #222;
-        color: white;
-        font-size: 17px;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background: #444;
-    }
-
     .result {
         margin-top: 25px;
         padding: 18px;
@@ -91,107 +75,112 @@
 
 <body>
 
-```
 <div class="calculator">
 
-    <h2>Percentage Calculator</h2>
+```
+<h2>Percentage Calculator</h2>
 
-    <label for="upper">Upper Value</label>
-    <input
-        type="number"
-        id="upper"
-        placeholder="Enter Upper Value"
-    >
+<label for="upper">Upper Value</label>
+<input
+    type="number"
+    id="upper"
+    placeholder="Enter Upper Value"
+    oninput="calculate()"
+>
 
-    <label for="lower">Lower Value</label>
-    <input
-        type="number"
-        id="lower"
-        placeholder="Enter Lower Value"
-    >
+<label for="lower">Lower Value</label>
+<input
+    type="number"
+    id="lower"
+    placeholder="Enter Lower Value"
+    oninput="calculate()"
+>
 
-    <label for="raised">Raised / Particular Amount</label>
-    <input
-        type="number"
-        id="raised"
-        placeholder="Enter Raised Amount"
-    >
+<label for="raised">Raised / Particular Amount</label>
+<input
+    type="number"
+    id="raised"
+    placeholder="Enter Raised Amount"
+    oninput="calculate()"
+>
 
-    <button type="button" onclick="calculate()">
-        Calculate
-    </button>
+<div class="result">
 
-    <div class="result">
+    <p>
+        Less Amount:
+        <strong id="lessAmount">-</strong>
+    </p>
 
-        <p>
-            Less Amount:
-            <strong id="lessAmount">-</strong>
-        </p>
+    <p>
+        Percentage:
+        <strong id="percentage">-</strong>
+    </p>
 
-        <p>
-            Percentage:
-            <strong id="percentage">-</strong>
-        </p>
+    <p>
+        Result:
+        <strong id="category">-</strong>
+    </p>
 
-        <p>
-            Result:
-            <strong id="category">-</strong>
-        </p>
-
-    </div>
+</div>
+```
 
 </div>
 
 <script>
-    function calculate() {
+function calculate() {
 
-        const upperInput = document.getElementById("upper");
-        const lowerInput = document.getElementById("lower");
-        const raisedInput = document.getElementById("raised");
+    const upper = parseFloat(document.getElementById("upper").value);
+    const lower = parseFloat(document.getElementById("lower").value);
+    const raised = parseFloat(document.getElementById("raised").value);
 
-        const upper = parseFloat(upperInput.value);
-        const lower = parseFloat(lowerInput.value);
-        const raised = parseFloat(raisedInput.value);
+    const lessAmountElement = document.getElementById("lessAmount");
+    const percentageElement = document.getElementById("percentage");
+    const categoryElement = document.getElementById("category");
 
-        if (
-            Number.isNaN(upper) ||
-            Number.isNaN(lower) ||
-            Number.isNaN(raised)
-        ) {
-            alert("Please enter all three values.");
-            return;
-        }
-
-        if (raised === 0) {
-            alert("Raised Amount cannot be zero.");
-            return;
-        }
-
-        const lessAmount = upper - lower;
-
-        const percentage = (lessAmount / raised) * 100;
-
-        let category;
-
-        if (percentage <= 15) {
-            category = "High";
-        } else if (percentage <= 50) {
-            category = "Medium";
-        } else {
-            category = "Low";
-        }
-
-        document.getElementById("lessAmount").textContent =
-            lessAmount.toFixed(2);
-
-        document.getElementById("percentage").textContent =
-            percentage.toFixed(2) + "%";
-
-        document.getElementById("category").textContent =
-            category;
+    // Jab tak teeno values nahi bhari hain
+    if (
+        Number.isNaN(upper) ||
+        Number.isNaN(lower) ||
+        Number.isNaN(raised)
+    ) {
+        lessAmountElement.textContent = "-";
+        percentageElement.textContent = "-";
+        categoryElement.textContent = "-";
+        return;
     }
+
+    // Raised amount zero nahi ho sakta
+    if (raised === 0) {
+        lessAmountElement.textContent = "-";
+        percentageElement.textContent = "Cannot calculate";
+        categoryElement.textContent = "-";
+        return;
+    }
+
+    // Upper - Lower
+    const lessAmount = upper - lower;
+
+    // Less Amount / Raised Amount × 100
+    const percentage = (lessAmount / raised) * 100;
+
+    let category;
+
+    if (percentage <= 15) {
+        category = "High";
+    } else if (percentage <= 50) {
+        category = "Medium";
+    } else {
+        category = "Low";
+    }
+
+    lessAmountElement.textContent = lessAmount.toFixed(2);
+
+    percentageElement.textContent =
+        percentage.toFixed(2) + "%";
+
+    categoryElement.textContent = category;
+}
 </script>
-```
 
 </body>
 </html>
